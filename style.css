@@ -98,15 +98,27 @@ body {
 
 #player-top-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* center all three groups horizontally */
   align-items: flex-start;
-  gap: 1rem;
+  gap: 4rem; /* compact spacing so blitz/wood sit close to post piles */
   margin-bottom: 0.75rem;
+}
+
+.pile-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .pile-group h3 {
   font-size: 0.9rem;
   margin-bottom: 0.3rem;
+}
+
+#player-hand-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #player-hand-row h3 {
@@ -131,11 +143,24 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.bot-top-row {
+  display: flex;
+  justify-content: center; /* center all three groups horizontally */
+  align-items: flex-start;
+  gap: 2rem; /* shorter spacing between pile groups */
+  margin-bottom: 0.75rem;
+}
+
 .bot {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
   margin-right: 1rem;
+}
+
+.bot h3 {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
 }
 
 .bot h3 {
