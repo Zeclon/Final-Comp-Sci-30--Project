@@ -5,6 +5,7 @@
   padding: 0;
 }
 
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background-color: #0b3b24; /* dark green table */
@@ -15,11 +16,13 @@ body {
   min-height: 100vh;
 }
 
+
 #game-container {
   width: 90vw;
   max-width: 1200px;
   padding: 1rem 1.5rem 2rem;
 }
+
 
 /* Header */
 #game-header {
@@ -29,10 +32,12 @@ body {
   margin-bottom: 1.5rem;
 }
 
+
 #game-header h1 {
   font-size: 2rem;
   letter-spacing: 0.08em;
 }
+
 
 #start-game-btn {
   padding: 0.5rem 1rem;
@@ -45,9 +50,11 @@ body {
   transition: background-color 0.2s ease;
 }
 
+
 #start-game-btn:hover {
   background-color: #f6c344;
 }
+
 
 /* Table layout */
 #table {
@@ -56,6 +63,7 @@ body {
   row-gap: 1.5rem;
 }
 
+
 /* Central piles */
 #central-piles {
   background: rgba(0, 0, 0, 0.2);
@@ -63,10 +71,12 @@ body {
   border-radius: 8px;
 }
 
+
 #central-piles h2 {
   font-size: 1rem;
   margin-bottom: 0.5rem;
 }
+
 
 .pile-row {
   display: flex;
@@ -74,6 +84,7 @@ body {
   justify-content: center;
   margin-bottom: 0.5rem;
 }
+
 
 .pile {
   width: 70px;
@@ -84,6 +95,7 @@ body {
   position: relative;
 }
 
+
 /* Player area */
 #player-area {
   background: rgba(0, 0, 0, 0.25);
@@ -91,10 +103,12 @@ body {
   border-radius: 8px;
 }
 
+
 #player-area h2 {
   font-size: 1rem;
   margin-bottom: 0.5rem;
 }
+
 
 #player-top-row {
   display: flex;
@@ -104,16 +118,19 @@ body {
   margin-bottom: 0.75rem;
 }
 
+
 .pile-group {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+
 .pile-group h3 {
   font-size: 0.9rem;
   margin-bottom: 0.3rem;
 }
+
 
 #player-hand-row {
   display: flex;
@@ -121,27 +138,46 @@ body {
   align-items: center;
 }
 
+
 #player-hand-row h3 {
   font-size: 0.9rem;
   margin-bottom: 0.3rem;
 }
+
 
 #player-hand {
   display: flex;
   gap: 0.4rem;
 }
 
+
 /* Bots area */
-#bots-area {
+#bots-area1 {
+  /* background: rgba(0, 0, 0, 0.2); */
+  padding: 0.75rem 1rem 1rem;
+  border-radius: 8px;
+}
+
+
+#bots-area2 {
   background: rgba(0, 0, 0, 0.2);
   padding: 0.75rem 1rem 1rem;
   border-radius: 8px;
 }
 
-#bots-area h2 {
+
+#bots-area3 {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.75rem 1rem 1rem;
+  border-radius: 8px;
+}
+
+
+#bots-area1 h2 {
   font-size: 1rem;
   margin-bottom: 0.5rem;
 }
+
 
 .bot-top-row {
   display: flex;
@@ -151,6 +187,7 @@ body {
   margin-bottom: 0.75rem;
 }
 
+
 .bot {
   display: flex;
   flex-direction: column;
@@ -158,16 +195,14 @@ body {
   margin-right: 1rem;
 }
 
+
 .bot h3 {
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
 }
 
-.bot h3 {
-  font-size: 0.9rem;
-}
 
-/* Card placeholder styling (for when you render cards later) */
+/* Card placeholder styling */
 .card {
   width: 60px;
   height: 90px;
@@ -185,7 +220,8 @@ body {
   left: 0;
 }
 
-/* Utility classes you might use later */
+
+/* Utility class*/
 .hidden {
   display: none;
 }

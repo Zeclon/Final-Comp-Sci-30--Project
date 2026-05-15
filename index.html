@@ -12,6 +12,7 @@
       <button id="start-game-btn">Start Game</button>
     </header>
 
+
     <main id="table">
       <!-- Central piles (1–10 stacks) -->
       <section id="central-piles">
@@ -50,17 +51,51 @@
           <div class="pile central-pile" data-pile="25"></div>
           <div class="pile central-pile" data-pile="20"></div>
         </div>  -->
+
+
+
+
+        <section id="bots-area1">
+          <h2>Bots</h2>
+          <div class="bot" id="bot-1">
+          <div class="bot" id="bot-1">
+            <h3>Bot 1</h3>
+            <div class="bot-top-row">
+              <div class="pile-group">
+                <h3>Blitz Pile</h3>
+                <div class="pile bot-blitz"></div>
+              </div>
+ 
+              <div class="pile-group">
+                <h3>Bot 1 - Post Piles</h3>
+                <div class="pile-row">
+                  <div class="pile post-pile" data-post="1"></div>
+                  <div class="pile post-pile" data-post="2"></div>
+                  <div class="pile post-pile" data-post="3"></div>
+                </div>
+              </div>
+ 
+              <div class="pile-group">
+                <h3>Bot 1 -Wood Pile</h3>
+                <div class="pile wood-pile" id="player-wood"></div>
+              </div>
+            </div>
+          </div> <!-- End of Bot 1 -->
+        </section>
       </section>
+
 
       <!-- Player area -->
       <section id="player-area">
         <h2>Your Area</h2>
+
 
         <div id="player-top-row">
           <div class="pile-group">
             <h3>Blitz Pile</h3>
             <div class="pile blitz-pile" id="player-blitz"></div>
           </div>
+
 
           <div class="pile-group">
             <h3>Post Piles</h3>
@@ -71,11 +106,13 @@
             </div>
           </div>
 
+
           <div class="pile-group">
             <h3>Wood Pile</h3>
             <div class="pile wood-pile" id="player-wood"></div>
           </div>
         </div>
+
 
         <div id="player-hand-row">
           <h3>Your Hand</h3>
@@ -83,8 +120,9 @@
         </div>
       </section>
 
+
       <!-- Bot area placeholder -->
-      <section id="bots-area">
+      <!-- <section id="bots-area1">
         <h2>Bots</h2>
         <div class="bot" id="bot-1">
         <div class="bot" id="bot-1">
@@ -95,6 +133,7 @@
               <div class="pile bot-blitz"></div>
             </div>
 
+
             <div class="pile-group">
               <h3>Bot 1 - Post Piles</h3>
               <div class="pile-row">
@@ -104,14 +143,19 @@
               </div>
             </div>
 
+
             <div class="pile-group">
               <h3>Bot 1 -Wood Pile</h3>
               <div class="pile wood-pile" id="player-wood"></div>
             </div>
           </div>
-        </div> <!-- End of Bot 1 -->
-        </div> <!-- End of Bot 1 -->
+        </div>  End of Bot 1 -->
+      <!-- </section>  -->
 
+
+
+
+      <section id="bots-area2">
         <div class="bot" id="bot-2">
           <h3>Bot 2</h3>
           <div class="bot-top-row">
@@ -119,6 +163,7 @@
               <h3>Blitz Pile</h3>
               <div class="pile bot-blitz"></div>
             </div>
+
 
             <div class="pile-group">
               <h3>Bot 2 - Post Piles</h3>
@@ -129,13 +174,19 @@
               </div>
             </div>
 
+
             <div class="pile-group">
               <h3>Bot 2 -Wood Pile</h3>
               <div class="pile wood-pile" id="player-wood"></div>
             </div>
           </div>
         </div> <!-- End of Bot 2 -->
+      </section>
 
+
+
+
+      <section id="bots-area3">
         <div class="bot" id="bot-3">
           <h3>Bot 3</h3>
           <div class="bot-top-row">
@@ -143,6 +194,7 @@
               <h3>Blitz Pile</h3>
               <div class="pile bot-blitz"></div>
             </div>
+
 
             <div class="pile-group">
               <h3>Bot 3 - Post Piles</h3>
@@ -153,16 +205,17 @@
               </div>
             </div>
 
+
             <div class="pile-group">
               <h3>Bot 3 -Wood Pile</h3>
               <div class="pile wood-pile" id="player-wood"></div>
             </div>
           </div>
         </div> <!-- End of Bot 3 -->
-
-      </section>
+      </section3>
     </main>
   </div>
+
 
   <!-- Your JS will go here later -->
   <script src="script.js"></script>
