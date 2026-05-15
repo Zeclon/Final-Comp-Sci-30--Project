@@ -3,7 +3,7 @@ let allCards = [];
 let allPiles = [];
 
 function createDeck() {
-    const allDesigns = [];
+    const allDesigns = ["carriage", "pail", ""];
     const allColors = ["Red", "Blue", "Green", "Yellow"];
     const allNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const allTypes = ["Boy", "Girl"];
