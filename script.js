@@ -1,46 +1,267 @@
 // Main File
-let allCards = [];
-let allPiles = [];
+var allCards = [];
+
+function getCardImagePath(color, number) {
+    if (color === "Yellow") {
+        return "Images/frontSide/Yellow/Y_" + number + ".png";
+    }
+    if (color === "Green") {
+        return "Images/frontSide/Green/G_" + number + ".png";
+    }
+    return null;
+}
 
 function createDeck() {
-    const allDesigns = ["carriage", "pail", ""];
-    const allColors = ["Red", "Blue", "Green", "Yellow"];
-    const allNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    const allTypes = ["Boy", "Girl"];
+    var deck = [];
+    var colors = ["Yellow", "Green"];
+    var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    var cardId = 1;
+
+    for (var i = 0; i < colors.length; i++) {
+        var color = colors[i];
+        for (var j = 0; j < numbers.length; j++) {
+            var number = numbers[j];
+            var image = getCardImagePath(color, number);
+            deck.push(new Card(color, color, number, "deck", cardId, image));
+            cardId = cardId + 1;
+        }
+    }
+
+    allCards = deck;
+    return deck;
 } // end createDeck function
 
 function shuffleDeck(deck) {
+    if (deck === null || deck === undefined) {
+        return deck;
+    }
+    if (deck.length === 0 || deck.length === 1) {
+        return deck;
+    }
 
+    return deck.sort(function() {
+        return Math.random() - 0.5;
+    });
 } // end shuffleDeck function
 
-function dealCards() {
-    if (button === "Start Game") {
-
+function dealCards(deck) {
+    if (deck === null || deck === undefined) {
+        return;
     }
+    if (deck.length === 0) {
+        return;
+    }
+
+    var cardIndex = 0;
+
+    // Deal the player's Blitz pile (10 cards)
+    for (var i = 0; i < 10; i++) {
+        var card = deck[cardIndex];
+        gamePiles.player.blitz.addCard(card);
+        cardIndex = cardIndex + 1;
+    }
+
+    // Deal the player's Wood pile (3 cards)
+    for (var j = 0; j < 3; j++) {
+        var card2 = deck[cardIndex];
+        gamePiles.player.wood.addCard(card2);
+        cardIndex = cardIndex + 1;
+    }
+
+    // Deal the player's Post piles (1 card each)
+    for (var k = 0; k < 3; k++) {
+        var card3 = deck[cardIndex];
+        gamePiles.player.posts[k].addCard(card3);
+        cardIndex = cardIndex + 1;
+    }
+
+    // Remaining cards stay in the player's hand pile
+    for (var m = cardIndex; m < deck.length; m++) {
+        var card4 = deck[m];
+        gamePiles.player.hand.addCard(card4);
+    }
+
+    showPlayerHand();
+    showPlayerBlitz();
+    showPlayerPosts();
+    showCentralPiles();
 } // end dealCards function
 
 function canPlayCard(card, pile) {
+    if (card === null || card === undefined) {
+        return false;
+    }
+    if (pile === null || pile === undefined) {
+        return false;
+    }
 
+    if (pile.type !== "central") {
+        return false;
+    }
+
+    if (pile.isEmpty()) {
+        return card.num === 1;
+    }
+
+    var topCard = pile.getTopCard();
+    if (topCard === null || topCard === undefined) {
+        return false;
+    }
+
+    return topCard.color === card.color && card.num === topCard.num + 1;
 } // end canPlayCard function
 
 function moveCard(card, fromPile, toPile) {
+    if (canPlayCard(card, toPile) === false) {
+        return false;
+    }
 
+    var removedCard = fromPile.removeTopCard();
+    if (removedCard === null || removedCard === undefined) {
+        return false;
+    }
+
+    toPile.addCard(card);
+    showPlayerHand();
+    showPlayerBlitz();
+    showPlayerPosts();
+    showCentralPiles();
+    return true;
 } // end moveCard function
 
 function setupGame() {
-    setupGamePiles();  // Create all the Pile objects first
-    const deck = createDeck();  // shuffle and distribute cards
+    gamePiles = new GamePiles();
+    setupGamePiles(); 
+    var deck = createDeck();  // shuffle and distribute cards
     shuffleDeck(deck);
     dealCards(deck);
 } // end setupGame function
 
+function clearElement(element) {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+}
+
+function showPlayerHand() {
+    var handElement = document.getElementById("player-hand");
+    if (handElement === null || handElement === undefined) {
+        return;
+    }
+
+    clearElement(handElement);
+    var handPile = gamePiles.player.hand;
+    if (handPile === null || handPile === undefined) {
+        return;
+    }
+
+    for (var i = 0; i < handPile.cards.length; i++) {
+        var card = handPile.cards[i];
+        var cardElement = card.display();
+        cardElement.style.position = "relative";
+        cardElement.style.left = "0";
+        cardElement.style.top = "0";
+        handElement.appendChild(cardElement);
+    }
+}
+
+function showPlayerBlitz() {
+    var blitzElement = document.getElementById("player-blitz");
+    if (blitzElement === null || blitzElement === undefined) {
+        return;
+    }
+
+    clearElement(blitzElement);
+    var blitzPile = gamePiles.player.blitz;
+    if (blitzPile === null || blitzPile === undefined) {
+        return;
+    }
+
+    for (var i = 0; i < blitzPile.cards.length; i++) {
+        var card = blitzPile.cards[i];
+        var cardElement = card.display();
+        cardElement.style.position = "relative";
+        cardElement.style.left = "0";
+        cardElement.style.top = "0";
+        blitzElement.appendChild(cardElement);
+    }
+}
+
+function showPlayerPosts() {
+    var playerArea = document.getElementById("player-area");
+    if (playerArea === null || playerArea === undefined) {
+        return;
+    }
+
+    var postElements = playerArea.getElementsByClassName("post-pile");
+    for (var i = 0; i < postElements.length && i < gamePiles.player.posts.length; i++) {
+        var postElement = postElements[i];
+        clearElement(postElement);
+
+        var postPile = gamePiles.player.posts[i];
+        if (postPile === null || postPile === undefined) {
+            continue;
+        }
+
+        if (postPile.isEmpty() === false) {
+            var topCard = postPile.getTopCard();
+            if (topCard !== null && topCard !== undefined) {
+                var cardElement = topCard.display();
+                cardElement.style.position = "relative";
+                cardElement.style.left = "0";
+                cardElement.style.top = "0";
+                postElement.appendChild(cardElement);
+            }
+        }
+    }
+}
+
+function showCentralPiles() {
+    var centralArea = document.getElementById("central-piles");
+    if (centralArea === null || centralArea === undefined) {
+        return;
+    }
+
+    var centralElements = centralArea.getElementsByClassName("central-pile");
+    for (var i = 0; i < centralElements.length && i < gamePiles.central.length; i++) {
+        var centralElement = centralElements[i];
+        clearElement(centralElement);
+
+        var centralPile = gamePiles.central[i];
+        if (centralPile === null || centralPile === undefined) {
+            continue;
+        }
+
+        if (centralPile.isEmpty() === false) {
+            var topCard = centralPile.getTopCard();
+            if (topCard !== null && topCard !== undefined) {
+                var cardElement = topCard.display();
+                cardElement.style.position = "relative";
+                cardElement.style.left = "0";
+                cardElement.style.top = "0";
+                centralElement.appendChild(cardElement);
+            }
+        }
+    }
+}
+
+var startButton = document.getElementById("start-game-btn");
+if (startButton !== null && startButton !== undefined) {
+    startButton.addEventListener("click", setupGame);
+}
+
 class Card {
-    constructor(design, color, num, type, id) {
+    constructor(design, color, num, type, id, image) {
         this.design = design;
         this.color = color;
         this.num = num;
         this.type = type;
         this.id = id;
+        if (image === null || image === undefined) {
+            this.image = null;
+        } else {
+            this.image = image;
+        }
 
         this.w = 60;
         this.h = 90;
@@ -49,10 +270,18 @@ class Card {
     } // constructor
 
     display() {
-        const cardElement = document.createElement("div");
+        var cardElement = document.createElement("div");
         cardElement.className = "card";
-        
-        cardElement.textContent  = "" + this.design + " " + this.color + " " + this.num + " " + this.type;
+
+        if (this.image !== null && this.image !== undefined) {
+            cardElement.style.backgroundImage = "url('" + this.image + "')";
+            cardElement.style.backgroundSize = "cover";
+            cardElement.style.backgroundPosition = "center";
+            cardElement.textContent = "";
+        } else {
+            cardElement.textContent = this.design + " " + this.color + " " + this.num;
+        }
+
         cardElement.style.left = this.x + "px";
         cardElement.style.top = this.y + "px";
 
@@ -62,8 +291,8 @@ class Card {
 
 } // end Card class
 class Pile {
-    constructor() {
-        this.type = this.type;  // e.g. central, post
+    constructor(type, x, y) {
+        this.type = type;  // e.g. central, post
         this.cards = [];
         this.x = this.x;
         this.y = this.y;
@@ -92,7 +321,7 @@ class Pile {
 
 class GamePiles {
     constructor() {
-        this.central = [];    // will hold 28 Pile objects
+        this.central = [];    
         this.player = new PlayerArea();
         this.bots = [];       // will hold 3 bot objects
     } // constructor
@@ -130,10 +359,10 @@ class BotArea {
     }
 } // end BotArea class
 
-let gamePiles = new GamePiles();
+var gamePiles = new GamePiles();
 
 function setupGamePiles() {
-    for (let i = 0; i < 28; i++) {
+    for (var i = 0; i < 4; i++) {
         gamePiles.central.push(new Pile('central', 0, 0));
     }
     
@@ -148,8 +377,8 @@ function setupGamePiles() {
     gamePiles.player.hand = new Pile('hand', 0, 0);
 
     // Bot Piles
-    for (let i = 0; i < 3; i++) {
-        const botArea = new BotArea();
+    for (var i = 0; i < 3; i++) {
+        var botArea = new BotArea();
         botArea.blitz = new Pile('blitz', 0, 0);
         botArea.posts = [
             new Pile('post', 0, 0),
