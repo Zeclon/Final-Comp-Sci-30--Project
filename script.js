@@ -19,16 +19,22 @@ function getCardImagePath(color, number) {
 
 function createDeck() {
     var deck = [];
+    var designs = ["Carriage", "Pail", "Plow", "Pump"];
     var colors = ["Yellow", "Green", "Red", "Blue"];
     var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     var cardId = 1;
 
     for (let i = 0; i < colors.length; i++) {
         var color = colors[i];
+        var design = designs[i];
         for (let j = 0; j < numbers.length; j++) {
             var number = numbers[j];
             var image = getCardImagePath(color, number);
-            deck.push(new Card(color, color, number, "deck", cardId, image));
+            if (color === "Yellow" || color === "Green")  {
+                deck.push(new Card(design, color, number, "girl", cardId, image));
+            } else if (color === "Blue" || color === "Red") {
+                deck.push(new Card(design, color, number, "boy", cardId, image));
+            }
             cardId = cardId + 1;
         }
     }
@@ -65,16 +71,17 @@ function dealCards(deck) {
     // Deal the player's Blitz pile (10 cards)
     for (let i = 0; i < 10; i++) {
         var card = deck[cardIndex];
+        // card.style.objectFit = "cover";
         gamePiles.player.blitz.addCard(card);
         cardIndex = cardIndex + 1;
     }
 
     // Deal the player's Wood pile (3 cards)
-    for (let j = 0; j < 3; j++) {
-        var card2 = deck[cardIndex];
-        gamePiles.player.wood.addCard(card2);
-        cardIndex = cardIndex + 1;
-    }
+    // for (let j = 0; j < 3; j++) {
+    //     var card2 = deck[cardIndex];
+    //     gamePiles.player.wood.addCard(card2);
+    //     cardIndex = cardIndex + 1;
+    // }
 
     // Deal the player's Post piles (1 card each)
     for (let k = 0; k < 3; k++) {
@@ -86,7 +93,8 @@ function dealCards(deck) {
     // Remaining cards stay in the player's hand pile
     for (let m = cardIndex; m < deck.length; m++) {
         var card4 = deck[m];
-        gamePiles.player.hand.addCard(card4);
+        // gamePiles.player.hand.addCard(card4);
+        gamePiles.player.wood.addCard(card4);
     }
 
     showPlayerHand();
@@ -218,9 +226,39 @@ function showPlayerPosts() {
                 cardElement.style.position = "relative";
                 cardElement.style.left = "0";
                 cardElement.style.top = "0";
+                cardElement.style.right = "100";
                 postElement.appendChild(cardElement);
             }
         }
+    }
+}
+
+function showPlayerWoods() {
+    if (playerArea === null || playerArea === undefined) {
+        return;
+    }
+
+    var woodElements = playerArea.getElementsByClassName("player-wood"); 
+    for (let i = 0; i < woodElements.length && i < gamePiles.player.wood.length; i++) {
+        var woodElement = woodElements[i];
+        clearElement(woodElement);
+
+        var woodPile = gamePiles.player.wood[i];
+        if (woodPile === null || woodPile === undefined) {
+            continue;
+        }
+
+        if (woodPile.isEmpty() === false) {
+            var topCard = woodPile.getTopCard();
+            if (topCard !== null && topCard !== undefined) {
+                var cardElement = topCard.display();
+                cardElement.style.position = "relative";
+                cardElement.style.left = "0";
+                cardElement.style.top = "0";
+                woodElement.appendChild(cardElement);
+            }
+        }
+
     }
 }
 
@@ -271,7 +309,7 @@ class Card {
             this.image = image;
         }
 
-        this.w = 60;
+        this.w = 70;
         this.h = 90;
         this.x = 0;
         this.y = 0;
@@ -285,6 +323,8 @@ class Card {
             cardElement.style.backgroundImage = "url('" + this.image + "')";
             cardElement.style.backgroundSize = "cover";
             cardElement.style.backgroundPosition = "center";
+            cardElement.style.aspectRatio = 16 / 9;
+            cardElement.style.objectFit = "cover";
             cardElement.textContent = "";
         } else {
             cardElement.textContent = this.design + " " + this.color + " " + this.num;
@@ -292,6 +332,9 @@ class Card {
 
         cardElement.style.left = this.x + "px";
         cardElement.style.top = this.y + "px";
+
+        var imageElement = document.createElement("");
+        this.image.style.position = "cover";
 
         return cardElement;
     } // display
@@ -311,7 +354,8 @@ class Pile {
     addCard(card) {
         this.cards.push(card);
         card.x = this.x;
-        card.y = this.y + (this.cards.length - 1) * 5;
+        card.y = this.y;
+        // + (this.cards.length - 1) * 5
     }
 
     removeTopCard() {
@@ -345,6 +389,10 @@ class GamePiles {
     getPlayerPost(num) {
         return this.player.posts[num];
     }
+
+    getPlayerWood(num) {
+        return this.player.wood[num];
+    }
     
     getBotPiles(botNum) {
         return this.bots[botNum];
@@ -355,7 +403,7 @@ class PlayerArea {
     constructor() {
         this.blitz = null;      // will hold 1 Pile object
         this.posts = [];        // will hold 3 Pile objects
-        this.wood = null;       // will hold 1 Pile object
+        this.wood = [];       // will hold  Pile object
         this.hand = null;       // will hold 1 Pile object
     }
 } // end PlayerArea class
@@ -363,7 +411,7 @@ class BotArea {
     constructor() {
         this.blitz = null;      // will hold 1 Pile object
         this.posts = [];        // will hold 3 Pile objects
-        this.wood = null;       // will hold 1 Pile object
+        this.wood = [];       // will hold 1 Pile object
     }
 } // end BotArea class
 
@@ -382,7 +430,7 @@ function setupGamePiles() {
         new Pile('post', 0, 0)
     ];
     gamePiles.player.wood = new Pile('wood', 0, 0);
-    gamePiles.player.hand = new Pile('hand', 0, 0);
+    // gamePiles.player.hand = new Pile('hand', 0, 0);
 
     // Bot Piles
     for (var i = 0; i < 3; i++) {
