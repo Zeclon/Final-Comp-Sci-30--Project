@@ -8,18 +8,24 @@ function getCardImagePath(color, number) {
     if (color === "Green") {
         return "Images/frontSide/Green/G_" + number + ".png";
     }
+    if (color === "Red") {
+        return "Images/frontSide/Red/R_" + number + ".png";
+    }
+    if (color === "Blue") {
+        return "Images/frontSide/Blue/B_" + number + ".png";
+    }
     return null;
 }
 
 function createDeck() {
     var deck = [];
-    var colors = ["Yellow", "Green"];
+    var colors = ["Yellow", "Green", "Red", "Blue"];
     var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     var cardId = 1;
 
-    for (var i = 0; i < colors.length; i++) {
+    for (let i = 0; i < colors.length; i++) {
         var color = colors[i];
-        for (var j = 0; j < numbers.length; j++) {
+        for (let j = 0; j < numbers.length; j++) {
             var number = numbers[j];
             var image = getCardImagePath(color, number);
             deck.push(new Card(color, color, number, "deck", cardId, image));
@@ -39,9 +45,11 @@ function shuffleDeck(deck) {
         return deck;
     }
 
-    return deck.sort(function() {
-        return Math.random() - 0.5;
-    });
+    return deck.sort(
+        function() {
+            return Math.random() - 0.5;
+        }
+    );
 } // end shuffleDeck function
 
 function dealCards(deck) {
@@ -55,28 +63,28 @@ function dealCards(deck) {
     var cardIndex = 0;
 
     // Deal the player's Blitz pile (10 cards)
-    for (var i = 0; i < 10; i++) {
+    for (let i = 0; i < 10; i++) {
         var card = deck[cardIndex];
         gamePiles.player.blitz.addCard(card);
         cardIndex = cardIndex + 1;
     }
 
     // Deal the player's Wood pile (3 cards)
-    for (var j = 0; j < 3; j++) {
+    for (let j = 0; j < 3; j++) {
         var card2 = deck[cardIndex];
         gamePiles.player.wood.addCard(card2);
         cardIndex = cardIndex + 1;
     }
 
     // Deal the player's Post piles (1 card each)
-    for (var k = 0; k < 3; k++) {
+    for (let k = 0; k < 3; k++) {
         var card3 = deck[cardIndex];
         gamePiles.player.posts[k].addCard(card3);
         cardIndex = cardIndex + 1;
     }
 
     // Remaining cards stay in the player's hand pile
-    for (var m = cardIndex; m < deck.length; m++) {
+    for (let m = cardIndex; m < deck.length; m++) {
         var card4 = deck[m];
         gamePiles.player.hand.addCard(card4);
     }
@@ -155,7 +163,7 @@ function showPlayerHand() {
         return;
     }
 
-    for (var i = 0; i < handPile.cards.length; i++) {
+    for (let i = 0; i < handPile.cards.length; i++) {
         var card = handPile.cards[i];
         var cardElement = card.display();
         cardElement.style.position = "relative";
@@ -177,7 +185,7 @@ function showPlayerBlitz() {
         return;
     }
 
-    for (var i = 0; i < blitzPile.cards.length; i++) {
+    for (let i = 0; i < blitzPile.cards.length; i++) {
         var card = blitzPile.cards[i];
         var cardElement = card.display();
         cardElement.style.position = "relative";
@@ -194,7 +202,7 @@ function showPlayerPosts() {
     }
 
     var postElements = playerArea.getElementsByClassName("post-pile");
-    for (var i = 0; i < postElements.length && i < gamePiles.player.posts.length; i++) {
+    for (let i = 0; i < postElements.length && i < gamePiles.player.posts.length; i++) {
         var postElement = postElements[i];
         clearElement(postElement);
 
@@ -223,7 +231,7 @@ function showCentralPiles() {
     }
 
     var centralElements = centralArea.getElementsByClassName("central-pile");
-    for (var i = 0; i < centralElements.length && i < gamePiles.central.length; i++) {
+    for (let i = 0; i < centralElements.length && i < gamePiles.central.length; i++) {
         var centralElement = centralElements[i];
         clearElement(centralElement);
 
@@ -362,7 +370,7 @@ class BotArea {
 var gamePiles = new GamePiles();
 
 function setupGamePiles() {
-    for (var i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i++) {
         gamePiles.central.push(new Pile('central', 0, 0));
     }
     
