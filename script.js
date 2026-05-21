@@ -226,7 +226,6 @@ function showPlayerPosts() {
                 cardElement.style.position = "relative";
                 cardElement.style.left = "0";
                 cardElement.style.top = "0";
-                cardElement.style.right = "100";
                 postElement.appendChild(cardElement);
             }
         }
@@ -323,8 +322,6 @@ class Card {
             cardElement.style.backgroundImage = "url('" + this.image + "')";
             cardElement.style.backgroundSize = "cover";
             cardElement.style.backgroundPosition = "center";
-            cardElement.style.aspectRatio = 16 / 9;
-            cardElement.style.objectFit = "cover";
             cardElement.textContent = "";
         } else {
             cardElement.textContent = this.design + " " + this.color + " " + this.num;
@@ -332,9 +329,6 @@ class Card {
 
         cardElement.style.left = this.x + "px";
         cardElement.style.top = this.y + "px";
-
-        var imageElement = document.createElement("");
-        this.image.style.position = "cover";
 
         return cardElement;
     } // display
@@ -404,7 +398,7 @@ class PlayerArea {
         this.blitz = null;      // will hold 1 Pile object
         this.posts = [];        // will hold 3 Pile objects
         this.wood = [];       // will hold  Pile object
-        this.hand = null;       // will hold 1 Pile object
+        this.hand = null;       // will hold 1 Pile object - OBSOLETEEEEEEEEEEEEEE
     }
 } // end PlayerArea class
 class BotArea {
