@@ -410,8 +410,6 @@ class Card {
             cardElement.style.backgroundImage = "url('" + this.image + "')";
             cardElement.style.backgroundSize = "cover";
             cardElement.style.backgroundPosition = "center";
-            cardElement.style.aspectRatio = 16 / 9;
-            cardElement.style.objectFit = "cover";
             cardElement.textContent = "";
         } else {
             cardElement.textContent = this.design + " " + this.color + " " + this.num;
@@ -485,8 +483,13 @@ class PlayerArea {
     constructor() {
         this.blitz = null;      // will hold 1 Pile object
         this.posts = [];        // will hold 3 Pile objects
+<<<<<<< HEAD
         this.wood = null;       // will hold 1 Pile object
         this.hand = null;       // will hold 1 Pile object
+=======
+        this.wood = [];       // will hold  Pile object
+        this.hand = null;       // will hold 1 Pile object - OBSOLETEEEEEEEEEEEEEE
+>>>>>>> 1d1e0fb2935965f07b8bc7ff33390acdee54063a
     }
 } // end PlayerArea class
 class BotArea {
