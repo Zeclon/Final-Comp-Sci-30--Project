@@ -19,8 +19,8 @@ function getCardImagePath(color, number) {
 
 function createDeck() {
     var deck = [];
-    var designs = ["Carriage", "Pail"];
-    var colors = ["Yellow", "Green"];
+    var designs = ["Carriage", "Pail", "Plow", "Pump"];
+    var colors = ["Yellow", "Green", "Red", "Blue"];
     var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     var cardId = 1;
 
@@ -30,7 +30,11 @@ function createDeck() {
         for (var j = 0; j < numbers.length; j++) {
             var number = numbers[j];
             var image = getCardImagePath(color, number);
-            deck.push(new Card(design, color, number, "girl", cardId, image));
+            if (color === "Yellow" || color === "Green")  {
+                deck.push(new Card(design, color, number, "girl", cardId, image));
+            } else if (color === "Blue" || color === "Red") {
+                deck.push(new Card(design, color, number, "boy", cardId, image));
+            }
             cardId = cardId + 1;
         }
     }
@@ -69,13 +73,15 @@ function dealCards(deck) {
         var card = deck[cardIndex];
         gamePiles.player.blitz.addCard(card);
         cardIndex = cardIndex + 1;
+        console.log(card);
     }
 
-    // Deal the player's Wood pile (3 cards)
+    // Deal the player's Wood pile 
     for (var j = 0; j < 3; j++) {
         var card2 = deck[cardIndex];
         gamePiles.player.wood.addCard(card2);
         cardIndex = cardIndex + 1;
+        console.log(card2);
     }
 
     // Deal the player's Post piles (1 card each)
@@ -83,12 +89,15 @@ function dealCards(deck) {
         var card3 = deck[cardIndex];
         gamePiles.player.posts[k].addCard(card3);
         cardIndex = cardIndex + 1;
+        console.log(card3);
     }
 
     // Remaining cards stay in the player's hand pile
     for (var m = cardIndex; m < deck.length; m++) {
         var card4 = deck[m];
         gamePiles.player.hand.addCard(card4);
+        cardIndex = cardIndex + 1;
+        console.log(card4);
     }
 
     showPlayerHand();
@@ -415,8 +424,6 @@ class Card {
             cardElement.textContent = this.design + " " + this.color + " " + this.num;
         }
 
-        cardElement.style.width = this.w + "px";
-        cardElement.style.height = this.h + "px";
         cardElement.style.left = this.x + "px";
         cardElement.style.top = this.y + "px";
 
@@ -483,13 +490,8 @@ class PlayerArea {
     constructor() {
         this.blitz = null;      // will hold 1 Pile object
         this.posts = [];        // will hold 3 Pile objects
-<<<<<<< HEAD
         this.wood = null;       // will hold 1 Pile object
         this.hand = null;       // will hold 1 Pile object
-=======
-        this.wood = [];       // will hold  Pile object
-        this.hand = null;       // will hold 1 Pile object - OBSOLETEEEEEEEEEEEEEE
->>>>>>> 1d1e0fb2935965f07b8bc7ff33390acdee54063a
     }
 } // end PlayerArea class
 class BotArea {
