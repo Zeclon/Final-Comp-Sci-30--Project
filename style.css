@@ -128,7 +128,7 @@ body {
   border: 1px solid rgba(255,255,255,0.18);
 }
 
-.design-pail {
+ .design-pail {
   background-image: url('Images/backSide/back_pail_Y.png');
 }
 
@@ -142,6 +142,22 @@ body {
 
 .design-plow {
   background-image: url('Images/backSide/back_plow_B.png');
+}
+
+.design-ferret {
+  background-image: url('Images/backSide/YellowFerret.png');
+}
+
+.design-dog {
+  background-image: url('Images/backSide/BlueDog.png');
+}
+
+.design-crow {
+  background-image: url('Images/backSide/GreenCrow.png');
+}
+
+.design-cat {
+  background-image: url('Images/backSide/RedCat.png');
 }
 
 .design-screen-note {
@@ -200,6 +216,12 @@ body {
   font-size: 0.85rem;
   color: #b0b0b0;
   margin-top: 0.25rem;
+}
+
+/* Center the three difficulty options */
+#difficulty-screen .design-options {
+  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  justify-items: center;
 }
 
 .selected-design-label {

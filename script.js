@@ -6,7 +6,7 @@ var easyMode = true;
 var botTimers = [];
 var selectedDesign = null;
 var selectedDifficulty = 'beginner';
-var availableDesigns = ["Pail", "Pump", "Carriage", "Plow"];
+var availableDesigns = ["Pail", "Pump", "Carriage", "Plow", "Ferret", "Dog", "Crow", "Cat"];
 var botDeckDesigns = [];
 var cumulativeScores = {
     player: 0,
@@ -33,31 +33,20 @@ function getCardImagePath(color, number) {
 }
 
 function getCardBackImagePath(design) {
-    if (design === "Pail") {
-        return "Images/backSide/back_pail_Y.png";
-    }
-    if (design === "Pump") {
-        return "Images/backSide/back_pump_G.png";
-    }
-    if (design === "Carriage") {
-        return "Images/backSide/back_carriage_R.png";
-    }
-    if (design === "Plow") {
-        return "Images/backSide/back_plow_B.png";
-    }
-    // fallback if passed a color value by accident
-    if (design === "Yellow") {
-        return "Images/backSide/back_pail_Y.png";
-    }
-    if (design === "Green") {
-        return "Images/backSide/back_pump_G.png";
-    }
-    if (design === "Red") {
-        return "Images/backSide/back_carriage_R.png";
-    }
-    if (design === "Blue") {
-        return "Images/backSide/back_plow_B.png";
-    }
+    if (design === "Pail") return "Images/backSide/back_pail_Y.png";
+    if (design === "Pump") return "Images/backSide/back_pump_G.png";
+    if (design === "Carriage") return "Images/backSide/back_carriage_R.png";
+    if (design === "Plow") return "Images/backSide/back_plow_B.png";
+    if (design === "Ferret") return "Images/backSide/YellowFerret.png";
+    if (design === "Dog") return "Images/backSide/BlueDog.png";
+    if (design === "Crow") return "Images/backSide/GreenCrow.png";
+    if (design === "Cat") return "Images/backSide/RedCat.png";
+
+    if (design === "Yellow") return "Images/backSide/back_pail_Y.png";
+    if (design === "Green") return "Images/backSide/back_pump_G.png";
+    if (design === "Red") return "Images/backSide/back_carriage_R.png";
+    if (design === "Blue") return "Images/backSide/back_plow_B.png";
+
     return null;
 }
 
@@ -95,7 +84,7 @@ function createDeck(deckDesign) {
 } // end createDeck function
 
 function createHighCardDeck(deckDesign) {
-    // For advanced mode - creates a deck with high cards (5-10) for player
+    // For advanced mode 
     var deck = [];
     var colors = ["Yellow", "Green", "Red", "Blue"];
     var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -144,39 +133,48 @@ function dealCards(deck) {
     }
 
     if (selectedDifficulty === 'advanced') {
-        // Advanced mode: sort player's cards so high cards (5-10) go to posts/blitz, low cards (1-4) go to wood/hand
+        // Advanced mode: 
         var highCards = [];
         var lowCards = [];
         for (var hc = 0; hc < deck.length; hc++) {
-            if (deck[hc].num >= 5) {
-                highCards.push(deck[hc]);
-            } else {
-                lowCards.push(deck[hc]);
-            }
+            if (deck[hc].num >= 5) highCards.push(deck[hc]);
+            else lowCards.push(deck[hc]);
         }
-        
-        var idx = 0;
-        // Deal high cards to posts and blitz
-        for (var p = 0; p < 3 && idx < highCards.length; p++) {
-            for (var pc = 0; pc < 10 && idx < highCards.length; pc++) {
-                gamePiles.player.posts[p].addCard(highCards[idx++]);
-            }
+
+        highCards = shuffleDeck(highCards);
+        lowCards = shuffleDeck(lowCards);
+
+        for (var p = 0; p < 3; p++) {
+            var cardToGive = null;
+            if (highCards.length > 0) cardToGive = highCards.pop();
+            else if (lowCards.length > 0) cardToGive = lowCards.pop();
+            if (cardToGive) gamePiles.player.posts[p].addCard(cardToGive);
         }
-        for (var b = 0; b < 10 && idx < highCards.length; b++) {
-            gamePiles.player.blitz.addCard(highCards[idx++]);
+
+        var blitzArr = [];
+        for (var i = 0; i < 9; i++) {
+            var c = null;
+            if (lowCards.length > 0) c = lowCards.pop();
+            else if (highCards.length > 0) c = highCards.pop();
+            if (c) blitzArr.push(c);
         }
-        // Deal remaining high cards and all low cards to hand (simulating wood+hand combined)
-        while (idx < highCards.length) {
-            gamePiles.player.hand.addCard(highCards[idx++]);
+        // 10th card 
+        var tenth = null;
+        if (highCards.length > 0) tenth = highCards.pop();
+        else if (lowCards.length > 0) tenth = lowCards.pop();
+        if (tenth) blitzArr.push(tenth);
+
+        for (var bi = 0; bi < blitzArr.length; bi++) {
+            gamePiles.player.blitz.addCard(blitzArr[bi]);
         }
-        for (var lc = 0; lc < lowCards.length; lc++) {
-            gamePiles.player.hand.addCard(lowCards[lc]);
-        }
+
+        while (lowCards.length > 0) gamePiles.player.hand.addCard(lowCards.pop());
+        while (highCards.length > 0) gamePiles.player.hand.addCard(highCards.pop());
     } else {
-        // Beginner and Intermediate: normal dealing
+        // Beginner and Intermediate:
         var cardIndex = 0;
 
-        // Deal the player's Blitz pile (10 cards)
+        // Deal the player's Blitz pile 
         for (var i = 0; i < 10; i++) {
             var card = deck[cardIndex];
             gamePiles.player.blitz.addCard(card);
@@ -184,7 +182,7 @@ function dealCards(deck) {
             console.log(card);
         }
 
-        // Deal the player's Post piles (1 card each)
+        // Deal the player's Post piles 
         for (var k = 0; k < 3; k++) {
             var card3 = deck[cardIndex];
             gamePiles.player.posts[k].addCard(card3);
@@ -192,7 +190,7 @@ function dealCards(deck) {
             console.log(card3);
         }
 
-        // Remaining cards stay in the player's hand pile
+        // Remaining cards 
         for (var m = cardIndex; m < deck.length; m++) {
             var card4 = deck[m];
             gamePiles.player.hand.addCard(card4);
@@ -207,30 +205,28 @@ function dealCards(deck) {
     showPlayerPosts();
     showCentralPiles();
 
-    // Create and deal separate decks for each bot (each bot gets its own deck)
+    
     for (var b = 0; b < gamePiles.bots.length; b++) {
         var botDesign = botDeckDesigns[b] || availableDesigns[b];
         var botDeck = createDeck(botDesign);
         shuffleDeck(botDeck);
         var bi = 0;
-        // blitz 10
+      
         for (var x = 0; x < 10 && bi < botDeck.length; x++) {
             gamePiles.bots[b].blitz.addCard(botDeck[bi++]);
         }
-        // leave wood empty at start
-        // posts 3
+       
         for (var y = 0; y < 3 && bi < botDeck.length; y++) {
             gamePiles.bots[b].posts[y].addCard(botDeck[bi++]);
         }
-        // remaining to hand
+      
         while (bi < botDeck.length) {
             gamePiles.bots[b].hand.addCard(botDeck[bi++]);
         }
-        // render bot areas
+        
         showBotArea(b);
     }
-    // start bot AI after a shorter startup delay so players can see the opening deal first
-    // shortened by 2000ms per user request
+
     setTimeout(setupBotsAI, 2200);
 } // end dealCards function
 
@@ -266,7 +262,6 @@ function moveCard(card, fromPile, toPile) {
 
     if (fromPile === null || fromPile === undefined) return false;
 
-    // Remove the specific card from the fromPile (not just the top)
     var removed = null;
     for (var i = fromPile.cards.length - 1; i >= 0; i--) {
         if (fromPile.cards[i] && fromPile.cards[i].id === card.id) {
@@ -278,7 +273,7 @@ function moveCard(card, fromPile, toPile) {
     if (removed === null || removed === undefined) {
         return false;
     }
-    // detect special case: placing a 10 onto a 9 in central piles -> flip and leave turned over
+   
     var prevTop = toPile.getTopCard();
     var willFlipAndFaceDown = false;
     if (prevTop && prevTop.num === 9 && removed.num === 10 && toPile.type === 'central') {
@@ -292,7 +287,7 @@ function moveCard(card, fromPile, toPile) {
     showPlayerPosts();
     showPlayerWood();
     showCentralPiles();
-    // Trigger flip animation on the target central pile when special-case happened
+
     if (willFlipAndFaceDown) {
         try {
             var centralIndex = -1;
@@ -308,9 +303,9 @@ function moveCard(card, fromPile, toPile) {
                     targetEl.addEventListener('animationend', onEnd);
                 }
             }
-        } catch (e) { /* ignore DOM errors in non-browser contexts */ }
+        } catch (e) {}
     }
-    // update bot UIs in case the from pile belonged to a bot
+
     for (var bi = 0; bi < gamePiles.bots.length; bi++) {
         var bArea = gamePiles.bots[bi];
         if (bArea) showBotArea(bi);
@@ -347,7 +342,7 @@ function onWoodClick(event) {
     var woodPile = gamePiles.player.wood;
     if (handPile === null || woodPile === null) return;
 
-    // Only flip when the hand is empty
+  
     if (!handPile.isEmpty()) return;
     if (woodPile.isEmpty()) return;
 
@@ -515,8 +510,7 @@ function showFinalWinnerScreen(winner, scores) {
     var screen = document.getElementById('final-winner-screen');
     if (!screen) return;
     screen.classList.remove('hidden', 'result-win', 'result-lose');
-    
-    // Apply win/lose styling
+
     if (winner.name === 'You') {
         screen.classList.add('result-win');
     } else {
@@ -540,7 +534,7 @@ function showFinalWinnerScreen(winner, scores) {
         });
     }
     
-    // Show stats button and add click listener
+ 
     if (statsBtn) {
         statsBtn.style.display = 'block';
         statsBtn.onclick = showStatsScreen;
@@ -693,7 +687,7 @@ function setupDragAndDrop() {
         postElement.addEventListener("drop", onPostPileDrop);
     }
 
-    // prepare player hand click listener (already handled in showPlayerHand)
+
 }
 
 function animateCardMove(sourceElement, targetElement, cb) {
@@ -718,7 +712,7 @@ function animateCardMove(sourceElement, targetElement, cb) {
     clone.style.opacity = '1';
     document.body.appendChild(clone);
 
-    // ensure target receives a short bounce when clone arrives
+
     var onCloneArrive = function() {
         // bounce target
         targetElement.classList.add('target-bounce');
@@ -728,7 +722,7 @@ function animateCardMove(sourceElement, targetElement, cb) {
         };
         targetElement.addEventListener('animationend', onAnim);
 
-        // remove clone and call callback
+        // remove clone
         if (clone.parentNode) clone.parentNode.removeChild(clone);
         if (typeof cb === 'function') cb();
     };
@@ -736,12 +730,12 @@ function animateCardMove(sourceElement, targetElement, cb) {
     requestAnimationFrame(function() {
         var deltaX = targetRect.left + (targetRect.width - sourceRect.width) / 2 - sourceRect.left;
         var deltaY = targetRect.top + (targetRect.height - sourceRect.height) / 2 - sourceRect.top;
-        // use transform with transition defined in CSS for smooth motion
+        
         clone.style.transform = 'translate(' + deltaX + 'px, ' + deltaY + 'px) scale(0.96)';
         clone.style.opacity = '0.9';
     });
 
-    // Fallback: use transitionend to detect arrival, but also timeout as safety
+    
     var arrived = false;
     var arrivalHandler = function() {
         if (arrived) return;
@@ -750,7 +744,7 @@ function animateCardMove(sourceElement, targetElement, cb) {
         onCloneArrive();
     };
     clone.addEventListener('transitionend', arrivalHandler);
-    // safety timeout in case transitionend doesn't fire
+    
     setTimeout(function() { if (!arrived) arrivalHandler(); }, 500);
 }
 
@@ -799,7 +793,7 @@ function checkForBlitzWinner() {
 
 function scheduleBotTick(botIndex) {
     if (gameOver) return;
-    // Bot timing varies by difficulty
+    
     var baseDelay, variance;
     if (selectedDifficulty === 'beginner') {
         baseDelay = 2400;
@@ -828,7 +822,7 @@ function botTick(botIndex) {
     var botArea = gamePiles.bots[botIndex];
     if (!botArea) return;
 
-    // If hand empty, flip wood into hand (reversed)
+    
     if (botArea.hand.isEmpty() && !botArea.wood.isEmpty()) {
         while (!botArea.wood.isEmpty()) {
             var c = botArea.wood.removeTopCard();
@@ -839,7 +833,6 @@ function botTick(botIndex) {
         return;
     }
 
-    // Try to find a playable top card from blitz, posts, wood, hand (in that order)
     var pileCandidates = [];
     if (!botArea.blitz.isEmpty()) pileCandidates.push({pile: botArea.blitz, type: 'blitz'});
     for (var p = 0; p < botArea.posts.length; p++) if (!botArea.posts[p].isEmpty()) pileCandidates.push({pile: botArea.posts[p], type: 'post', index: p});
@@ -854,11 +847,10 @@ function botTick(botIndex) {
         var ptype = pinfo.type;
         var card = pile.getTopCard();
         if (!card) continue;
-        // try each central pile
+       
         for (var cidx = 0; cidx < gamePiles.central.length; cidx++) {
             var central = gamePiles.central[cidx];
             if (canPlayCard(card, central)) {
-                // find a sensible source DOM element for animation (bot area)
                 var sourceEl = null;
                 if (botEl) {
                     if (ptype === 'blitz') sourceEl = botEl.querySelector('.bot-blitz') ? botEl.querySelector('.bot-blitz').firstElementChild : null;
@@ -892,18 +884,18 @@ function botTick(botIndex) {
                     doBotMove();
                 }
 
-                return; // one play per tick
+                return; 
             }
         }
     }
 
-    // If no central move was found, a blitz-to-empty-post should wait 1.5 seconds before placing
+   
     if (!botArea.blitz.isEmpty()) {
         var blitzCard = botArea.blitz.getTopCard();
         for (var postIndex = 0; postIndex < botArea.posts.length; postIndex++) {
             if (botArea.posts[postIndex].isEmpty() && canMoveCardToPost(blitzCard, botArea.blitz, botArea.posts[postIndex])) {
                 (function(postIdx, cardId) {
-                    // a bit slower bot blitz-to-post placement with variance
+                   
                     setTimeout(function() {
                         if (gameOver) return;
                         if (!botArea.blitz.isEmpty() && botArea.blitz.getTopCard().id === cardId && botArea.posts[postIdx].isEmpty()) {
@@ -919,7 +911,7 @@ function botTick(botIndex) {
         }
     }
 
-    // If no play, move up to three cards from hand to wood like the player
+   
     if (!botArea.hand.isEmpty()) {
         for (var j = 0; j < 3 && !botArea.hand.isEmpty(); j++) {
             var cardToWood = botArea.hand.removeTopCard();
@@ -1049,7 +1041,7 @@ function showBotArea(botIndex) {
             var top = blitzPile.getTopCard();
             if (top) {
                 var el = top.display();
-                // bots' cards not interactive
+                
                 el.style.cursor = 'default';
                 botBlitzEl.appendChild(el);
             }
@@ -1058,7 +1050,7 @@ function showBotArea(botIndex) {
 
     // Posts
     if (botPostRow) {
-        // assume three post-pile elements inside this bot
+     
         var postEls = botPostRow.getElementsByClassName('post-pile');
         for (var i = 0; i < postEls.length && i < gamePiles.bots[botIndex].posts.length; i++) {
             var pEl = postEls[i];
@@ -1493,7 +1485,6 @@ function initDesignSelection() {
 
 initDesignSelection();
 
-// Initialize difficulty selection
 var difficultyOptions = document.querySelectorAll('.difficulty-option');
 difficultyOptions.forEach(function(option) {
     option.addEventListener('click', function() {
@@ -1633,7 +1624,7 @@ class Pile {
         this.cards.push(card);
         card.x = this.x;
         card.y = this.y;
-        // + (this.cards.length - 1) * 5
+        
     }
 
     removeTopCard() {
@@ -1653,7 +1644,7 @@ class GamePiles {
     constructor() {
         this.central = [];    
         this.player = new PlayerArea();
-        this.bots = [];       // will hold 3 bot objects
+        this.bots = [];      
     } // constructor
 
     getCentralPile(num) {
@@ -1675,17 +1666,17 @@ class GamePiles {
 
 class PlayerArea {
     constructor() {
-        this.blitz = null;      // will hold 1 Pile object
-        this.posts = [];        // will hold 3 Pile objects
-        this.wood = null;       // will hold 1 Pile object
-        this.hand = null;       // will hold 1 Pile object
+        this.blitz = null;      
+        this.posts = [];        
+        this.wood = null;       
+        this.hand = null;       
     }
 } // end PlayerArea class
 class BotArea {
     constructor() {
-        this.blitz = null;      // will hold 1 Pile object
-        this.posts = [];        // will hold 3 Pile objects
-        this.wood = [];       // will hold 1 Pile object
+        this.blitz = null;      
+        this.posts = [];       
+        this.wood = [];       
     }
 } // end BotArea class
 
