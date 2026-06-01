@@ -6,15 +6,94 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="design-screen">
+    <div class="design-screen-card">
+      <h2>Choose Your Deck Design</h2>
+      <p>Select one of the four back-card designs to use for your deck.</p>
+      <div class="design-options">
+        <button class="design-option" data-design="Pail">
+          <div class="design-preview design-pail"></div>
+          <span>Pail</span>
+        </button>
+        <button class="design-option" data-design="Pump">
+          <div class="design-preview design-pump"></div>
+          <span>Pump</span>
+        </button>
+        <button class="design-option" data-design="Carriage">
+          <div class="design-preview design-carriage"></div>
+          <span>Carriage</span>
+        </button>
+        <button class="design-option" data-design="Plow">
+          <div class="design-preview design-plow"></div>
+          <span>Plow</span>
+        </button>
+      </div>
+      <p class="design-screen-note">Click a design to continue.</p>
+    </div>
+  </div>
+  <div id="difficulty-screen" class="hidden">
+    <div class="design-screen-card">
+      <h2>Select Difficulty Level</h2>
+      <p>Choose how challenging you want the game to be.</p>
+      <div class="design-options">
+        <button class="difficulty-option" data-difficulty="beginner">
+          <div class="difficulty-icon">🟢</div>
+          <span>Beginner</span>
+          <small>Normal bot speed</small>
+        </button>
+        <button class="difficulty-option" data-difficulty="intermediate">
+          <div class="difficulty-icon">🟡</div>
+          <span>Intermediate</span>
+          <small>Faster bot decisions</small>
+        </button>
+        <button class="difficulty-option" data-difficulty="advanced">
+          <div class="difficulty-icon">🔴</div>
+          <span>Advanced</span>
+          <small>Better bot AI + high cards</small>
+        </button>
+      </div>
+      <p class="design-screen-note">Select difficulty to start the game.</p>
+    </div>
+  </div>
+  <div id="result-screen" class="hidden">
+    <div class="result-card">
+      <h2 id="result-title">Game Over</h2>
+      <p id="result-subtitle">Winner: ---</p>
+      <div id="result-scores"></div>
+      <div class="result-button-row">
+        <button id="next-round-btn" class="secondary-btn" style="display: none;">Next Round</button>
+        <button id="play-again-btn" class="secondary-btn">Play Again</button>
+      </div>
+    </div>
+  </div>
+  <div id="final-winner-screen" class="hidden">
+    <div class="result-card">
+      <h2 id="final-winner-title">Tournament Winner!</h2>
+      <div id="final-winner-scores"></div>
+      <div class="result-button-row" style="margin-top: 2rem;">
+        <button id="view-stats-btn" class="secondary-btn" style="display: none;">View Tournament Stats</button>
+      </div>
+      <button id="restart-tournament-btn" class="secondary-btn">Start New Tournament</button>
+    </div>
+  </div>
+  <div id="stats-screen" class="hidden">
+    <div class="result-card">
+      <h2>Tournament Statistics</h2>
+      <div id="tournament-stats-list" style="max-height: 60vh; overflow-y: auto; margin: 1.5rem 0;"></div>
+      <button id="back-from-stats-btn" class="secondary-btn">Back to Results</button>
+    </div>
+  </div>
   <div id="game-container">
     <header id="game-header">
-      <h1>Dutch Blitz</h1>
+      <div>
+        <h1>Dutch Blitz</h1>
+        <div id="selected-design-label" class="selected-design-label">Pick a design to start</div>
+      </div>
       <button id="start-game-btn">Start Game</button>
     </header>
 
 
     <main id="table">
-      <!-- Central piles (4 stacks) -->
       <section id="central-piles">
         <h2>Central Piles</h2>
         <div class="pile-row">
@@ -22,6 +101,30 @@
           <div class="pile central-pile" data-pile="2"></div>
           <div class="pile central-pile" data-pile="3"></div>
           <div class="pile central-pile" data-pile="4"></div>
+          <div class="pile central-pile" data-pile="5"></div>
+          <div class="pile central-pile" data-pile="6"></div>
+          <div class="pile central-pile" data-pile="7"></div>
+          
+        </div>
+        <div class="pile-row">
+          <div class="pile central-pile" data-pile="10"></div>
+          <div class="pile central-pile" data-pile="11"></div>
+          <div class="pile central-pile" data-pile="12"></div>
+          <div class="pile central-pile" data-pile="13"></div>
+          <div class="pile central-pile" data-pile="14"></div>
+          <div class="pile central-pile" data-pile="15"></div>
+          <div class="pile central-pile" data-pile="16"></div>
+          
+        </div>
+        <div class="pile-row">
+          <div class="pile central-pile" data-pile="19"></div>
+          <div class="pile central-pile" data-pile="20"></div>
+          <div class="pile central-pile" data-pile="21"></div>
+          <div class="pile central-pile" data-pile="22"></div>
+          <div class="pile central-pile" data-pile="23"></div>
+          <div class="pile central-pile" data-pile="24"></div>
+          <div class="pile central-pile" data-pile="25"></div>
+          
         </div>
       </section>
 
@@ -48,6 +151,10 @@
             <div class="pile-group">
               <h3>Bot 1 - Wood Pile</h3>
               <div class="pile wood-pile" id="bot1-wood"></div>
+            </div>
+            <div class="pile-group">
+              <h3>Bot 1 - Hand</h3>
+              <div class="pile hand-pile" id="bot1-hand"></div>
             </div>
           </div>
         </div> <!-- End of Bot 1 -->
@@ -79,12 +186,12 @@
             <h3>Wood Pile</h3>
             <div class="pile wood-pile" id="player-wood"></div>
           </div>
-        </div>
 
 
-        <div id="player-hand-row">
-          <h3>Your Hand</h3>
-          <div id="player-hand"></div>
+          <div class="pile-group" id="player-hand-group">
+            <h3>Your Hand</h3>
+            <div id="player-hand"></div>
+          </div>
         </div>
       </section>
 
@@ -117,8 +224,13 @@
                 <div class="pile wood-pile" id="bot1-wood"></div>
             </div>
           </div>
-        </div>  End of Bot 1 -->
-      <!-- </section>  -->
+          <div class="pile-group">
+            <h3>Bot 2 - Hand</h3>
+            <div class="pile hand-pile" id="bot2-hand"></div>
+          </div>
+          </div>
+        </div>  
+      </section>  -->
 
 
 
@@ -132,7 +244,6 @@
               <div class="pile bot-blitz"></div>
             </div>
 
-
             <div class="pile-group">
               <h3>Bot 2 - Post Piles</h3>
               <div class="pile-row">
@@ -142,10 +253,15 @@
               </div>
             </div>
 
-
             <div class="pile-group">
               <h3>Bot 2 - Wood Pile</h3>
               <div class="pile wood-pile" id="bot2-wood"></div>
+            </div>
+          </div>
+          <div class="bot-hand-row">
+            <div class="pile-group">
+              <h3>Bot 2 - Hand</h3>
+              <div class="pile hand-pile" id="bot2-hand"></div>
             </div>
           </div>
         </div> <!-- End of Bot 2 -->
@@ -163,7 +279,6 @@
               <div class="pile bot-blitz"></div>
             </div>
 
-
             <div class="pile-group">
               <h3>Bot 3 - Post Piles</h3>
               <div class="pile-row">
@@ -173,10 +288,15 @@
               </div>
             </div>
 
-
             <div class="pile-group">
               <h3>Bot 3 - Wood Pile</h3>
               <div class="pile wood-pile" id="bot3-wood"></div>
+            </div>
+          </div>
+          <div class="bot-hand-row">
+            <div class="pile-group">
+              <h3>Bot 3 - Hand</h3>
+              <div class="pile hand-pile" id="bot3-hand"></div>
             </div>
           </div>
         </div> <!-- End of Bot 3 -->
@@ -184,8 +304,6 @@
     </main>
   </div>
 
-
-  <!-- Your JS will go here later -->
   <script src="script.js"></script>
 </body>
 </html>
