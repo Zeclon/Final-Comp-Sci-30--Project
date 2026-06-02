@@ -15,6 +15,15 @@ var cumulativeScores = {
 var tournamentOver = false;
 var tournamentStats = [];
 
+const instructionsScreen = document.getElementById('instructions-screen');
+const designScreen = document.getElementById('design-screen');
+const startInstructionsBtn = document.getElementById('start-instructions-btn');
+
+startInstructionsBtn.addEventListener('click', () => {
+  instructionsScreen.classList.add('hidden');
+  designScreen.classList.remove('hidden');
+});
+
 function getCardImagePath(color, number) {
     if (color === "Yellow") {
         return "Images/frontSide/Yellow/Y_" + number + ".png";

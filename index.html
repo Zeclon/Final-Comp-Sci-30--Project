@@ -6,7 +6,62 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="design-screen">
+  <div id="instructions-screen">
+    <div class="instructions-card">
+      <div class="instructions-header">
+        <h1>Final Comp Sci 30 Project</h1>
+        <h2>Online Dutch Blitz Game</h2>
+      </div>
+      
+      <div class="instructions-content">
+        <div class="instructions-section">
+          <h3>How to Play</h3>
+          <p>Dutch Blitz is a fast-paced card game played with a standard deck. In this online version, you'll compete against 3 AI opponents.</p>
+          <ul>
+            <li><strong>Objective:</strong> Build sequences of cards in the central piles from 1 to 10</li>
+            <li><strong>Starting Hand:</strong> You begin with 10 cards in your Blitz pile, 3 cards in your Post piles, and remaining cards in your Hand pile</li>
+            <li><strong>Gameplay:</strong> Play cards from your hand to build sequences on the central piles. You can also move cards between your Post piles and the central piles</li>
+            <li><strong>Blitz Pile:</strong> Once you've exhausted your other options, you can draw from your Blitz pile</li>
+            <li><strong>Winning a Round:</strong> Be the first to get rid of all your cards to win the round</li>
+          </ul>
+        </div>
+
+        <div class="instructions-section">
+          <h3>Scoring</h3>
+          <ul>
+            <li><strong>Winning Bonus:</strong> start with 0 points for winning a round</li>
+            <li><strong>Card Bonuses:</strong> +1 points for each card played to the central piles</li>
+            <li><strong>Penalty:</strong> -2 points for each unplayed card remaining in the blitz pile when someone wins</li>
+          </ul>
+        </div>
+
+        <div class="instructions-section">
+          <h3>Tournament Play</h3>
+          <ul>
+            <li><strong>Multiple Rounds:</strong> A tournament consists of several rounds of Dutch Blitz</li>
+            <li><strong>Cumulative Scoring:</strong> Your score carries over from round to round throughout the tournament</li>
+            <li><strong>Tournament Winner:</strong> The player who reaches 75 points first after all rounds wins the tournament</li>
+            <li><strong>Difficulty Levels:</strong> Choose your challenge level - Beginner, Intermediate, or Advanced AI opponents</li>
+          </ul>
+        </div>
+
+        <div class="instructions-section">
+          <h3>Tips for Success</h3>
+          <ul>
+            <li>Think fast - Dutch Blitz rewards quick decision-making</li>
+            <li>Prioritize playing cards to the central piles for bonus points</li>
+            <li>Use your Post piles strategically to free up cards from your Hand pile</li>
+            <li>Keep track of what cards your opponents have played</li>
+            <li>Flip through the hand pile quickly, DO NOT wait around for your opponents to play a card that you need to play your card</li>
+          </ul>
+        </div>
+      </div>
+
+      <button id="start-instructions-btn" class="primary-btn">Start Game</button>
+    </div>
+  </div>
+
+  <div id="design-screen" class="hidden">
     <div class="design-screen-card">
       <h2>Choose Your Deck Design</h2>
       <p>Select one of the four back-card designs to use for your deck.</p>
